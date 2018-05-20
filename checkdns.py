@@ -12,6 +12,8 @@ def nslookup(domain, r_type):
         return '-'
 
     #print(domain, list(r_data))
+    if len(r_data) > 3:
+        return '-'
 
     return ';'.join([str(x).endswith('.') and str(x)[:-1] or str(x) for x in r_data])
 
