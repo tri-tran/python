@@ -2,11 +2,8 @@ import dns.resolver
 import csv
 
 EMPTY = '-'
-CORRECT_IPS = [
-    "13.228.174.122",
-    "13.251.21.204",
-    "35.201.83.130"
-]
+GOOGLE_IPV4 = "35.201.83.130"
+GOOGLE_IPV6 = "2600:1901:0:8a57::"
 
 domains = []
 with open('domain.list') as f:
@@ -52,10 +49,11 @@ with open('result.csv', 'w', newline='') as csvfile:
                 if cname_aaaa == aaaa_record:
                     aaaa_record = EMPTY
 
-        fix_ips = 'TRUE'        
-        for ip in CORRECT_IPS:
-            if ip in a_record:
-                fix_ips = 'FALSE'
+        fix_ips = 'FALSE'        
+        if not (a_record == EMPTY or a_record == GOOGLE_IPV4):
+            fix_ips = 'TRUE'
+        if not (aaaa_record == GOOGLE_IPV6 or aaaa_record == EMPTY):
+            fix_ips = 'TRUE'
 
         to_print = [d, cname, a_record, aaaa_record, fix_ips]
         result_writer.writerow(to_print)
